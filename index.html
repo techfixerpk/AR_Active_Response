@@ -1,36 +1,120 @@
 import os
 deployment_dir = '/content/drive/MyDrive/AR_Deployment_Final'
+os.makedirs(deployment_dir, exist_ok=True)
 
-index_html_content = """<!DOCTYPE html>
+# Creating a high-performance single-file production version for GitHub/Static Hosting
+# This ensures NO Python code or broken imports are visible to the user.
+
+final_html = """<!DOCTYPE html>
 <html lang='en'>
-  <head>
-    <meta charset='UTF-8' />
-    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <title>AR (Active Response) - Nursing Care Services</title>
-    <!-- Tailwind CDN for deployment ease -->
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>AR (Active Response) Nursing Home Care Services</title>
     <script src='https://cdn.tailwindcss.com'></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: '#2563eb',
-              secondary: '#10b981',
-            }
-          }
-        }
-      }
+      tailwind.config = { theme: { extend: { colors: { primary: '#2563eb', secondary: '#10b981' } } } }
     </script>
-  </head>
-  <body>
-    <div id='root'></div>
-    <!-- Entry point for the React App -->
-    <script type='module' src='./App.jsx'></script>
-  </body>
+    <style>
+        .service-card:hover { transform: translateY(-5px); transition: 0.3s; }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class='bg-slate-50 font-sans'>
+    <!-- NAVBAR -->
+    <nav class='glass sticky top-0 z-50 shadow-sm border-b py-4 px-6 flex justify-between items-center'>
+        <div class='text-2xl font-black text-primary'>AR (Active Response)</div>
+        <div class='hidden md:flex gap-8 font-bold text-gray-600'>
+            <a href='#'>Home</a><a href='#services'>Services</a><a href='#equipments'>Equipments</a>
+        </div>
+        <a href='tel:03472241304' class='bg-primary text-white px-6 py-2 rounded-full font-bold shadow-lg hover:bg-blue-700 transition'>
+            <i class='fas fa-phone-alt mr-2'></i> Emergency
+        </a>
+    </nav>
+
+    <!-- HERO -->
+    <header class='bg-gradient-to-br from-blue-700 to-blue-900 text-white py-24 px-6 text-center'>
+        <h1 class='text-5xl md:text-7xl font-black mb-6 leading-tight'>
+            Professional Nursing Care <br class='hidden md:block'/> At Your Doorstep
+        </h1>
+        <p class='text-xl opacity-90 mb-10 max-w-3xl mx-auto'>Serving Rawalpindi & Islamabad 24/7 with ICU Trained Staff, Oxygen Therapy, and Medical Equipment.</p>
+        <div class='flex flex-wrap justify-center gap-4'>
+            <a href='https://wa.me/923472241304' class='bg-white text-blue-700 px-10 py-4 rounded-full font-black text-lg shadow-2xl hover:bg-gray-100 transition'>Book Service Now</a>
+            <a href='#services' class='border-2 border-white text-white px-10 py-4 rounded-full font-black text-lg hover:bg-white/10 transition'>View Services</a>
+        </div>
+    </header>
+
+    <!-- SERVICES GRID -->
+    <section id='services' class='py-20 px-6 max-w-7xl mx-auto'>
+        <h2 class='text-4xl font-black text-center mb-4'>Our Premium Services</h2>
+        <p class='text-center text-gray-500 mb-12'>24/7 Medical Assistance in Rawalpindi & Islamabad</p>
+        <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6' id='services-container'></div>
+    </section>
+
+    <!-- EQUIPMENTS -->
+    <section id='equipments' class='py-20 px-6 bg-white'>
+        <div class='max-w-7xl mx-auto'>
+            <h2 class='text-4xl font-black text-center mb-12'>Medical Equipment (Rent & Sale)</h2>
+            <div class='grid grid-cols-1 md:grid-cols-3 gap-8' id='equipments-container'></div>
+        </div>
+    </section>
+
+    <!-- WHATSAPP FLOAT -->
+    <a href='https://wa.me/923472241304' class='fixed bottom-8 right-8 bg-green-500 text-white p-5 rounded-full shadow-2xl hover:scale-110 transition z-50'>
+        <i class='fab fa-whatsapp text-4xl'></i>
+    </a>
+
+    <!-- FOOTER -->
+    <footer class='bg-slate-900 text-white py-12 px-6 text-center'>
+        <div class='text-2xl font-bold mb-4'>AR (Active Response) Nursing Services</div>
+        <p class='opacity-70 mb-6'>Founder: Awais Babar | Professional Care & Equipment Solutions</p>
+        <div class='text-lg font-bold text-primary'>Contact: 0347-2241304 | 0312-5166507</div>
+    </footer>
+
+    <script>
+        const services = [
+            { title: '24/7 ICU Trained Staff', desc: 'Critical care at home' },
+            { title: 'Doctor Visit', desc: 'Expert consultation' },
+            { title: 'Oxygen Therapy', desc: 'Concentrators & Cylinders' },
+            { title: 'IV Medication', desc: 'Professional drips & injections' },
+            { title: 'Post-Operative Care', desc: 'After surgery support' },
+            { title: 'Physiotherapy', desc: 'Expert mobility sessions' },
+            { title: 'Lab Sampling', desc: 'Home blood tests' },
+            { title: 'Ambulance 24/7', desc: 'Emergency transport' }
+        ];
+
+        const equipments = [
+            { name: 'Oxygen Concentrator', price: 'Rs. 5000/mo', type: 'Rent' },
+            { name: 'Bipap Machine', price: 'Contact for Rate', type: 'Rent' },
+            { name: 'Patient Hospital Bed', price: 'Rs. 15000', type: 'Sale' }
+        ];
+
+        document.getElementById('services-container').innerHTML = services.map(s => `
+            <div class='bg-white p-8 rounded-2xl shadow-sm border border-slate-100 service-card'>
+                <div class='w-12 h-12 bg-blue-100 text-primary rounded-lg flex items-center justify-center mb-4'>
+                    <i class='fas fa-heartbeat text-xl'></i>
+                </div>
+                <h3 class='font-bold text-xl mb-2'>${s.title}</h3>
+                <p class='text-gray-500 mb-4'>${s.desc}</p>
+                <a href='https://wa.me/923472241304' class='text-primary font-bold hover:underline'>Book Now &rarr;</a>
+            </div>
+        `).join('');
+
+        document.getElementById('equipments-container').innerHTML = equipments.map(e => `
+            <div class='bg-slate-50 p-6 rounded-2xl border border-dashed border-slate-300'>
+                <span class='bg-blue-600 text-white text-xs px-3 py-1 rounded-full font-bold'>${e.type}</span>
+                <h3 class='text-2xl font-bold mt-4'>${e.name}</h3>
+                <p class='text-primary font-black text-xl mt-2'>${e.price}</p>
+                <button class='w-full mt-6 bg-slate-900 text-white py-3 rounded-xl font-bold'>Check Availability</button>
+            </div>
+        `).join('');
+    </script>
+</body>
 </html>
 """
 
 with open(os.path.join(deployment_dir, 'index.html'), 'w') as f:
-    f.write(index_html_content)
+    f.write(final_html)
 
-print('Production index.html created in deployment folder to fix 2-line display issue.')
+print('A pure production-ready index.html has been generated. No more Python code issues!')
