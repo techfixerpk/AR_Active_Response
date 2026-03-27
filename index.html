@@ -1,0 +1,36 @@
+import os
+deployment_dir = '/content/drive/MyDrive/AR_Deployment_Final'
+
+index_html_content = """<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>AR (Active Response) - Nursing Care Services</title>
+    <!-- Tailwind CDN for deployment ease -->
+    <script src='https://cdn.tailwindcss.com'></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#2563eb',
+              secondary: '#10b981',
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id='root'></div>
+    <!-- Entry point for the React App -->
+    <script type='module' src='./App.jsx'></script>
+  </body>
+</html>
+"""
+
+with open(os.path.join(deployment_dir, 'index.html'), 'w') as f:
+    f.write(index_html_content)
+
+print('Production index.html created in deployment folder to fix 2-line display issue.')
