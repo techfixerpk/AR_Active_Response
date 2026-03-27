@@ -1,0 +1,1 @@
+export const APP_NAME = 'AR Nursing Care'; export const CONTACT = '0347-2241304';
